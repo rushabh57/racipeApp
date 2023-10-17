@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto:wght@300;400&display=swap');
+    :root{
+        --primaryClr:rgb(130, 255, 114);
+        --primaryHoverClr:rgb(154, 255, 141);
+        --darkClr:#252525;
+        --whiteClr:#f5f5f5;
+        --border:1.4px solid #393939;
+        --grayishClr:rgb(181, 181, 181);
+        --overlay:rgba(255,255,255,.5);
+
+        --radius:.5em;
+        --ff-m: 'Montserrat', sans-serif;
+        --ff-r: 'Roboto', sans-serif;
+    }
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        height: 100vh;
+        background: #141414;
+    }
+    .container{
+        width: 500px;
+        height: 100%;
+        margin: auto;
+        
+    }
+    .input-group{
+        /* border: 1px solid red; */
+        width: 300px;
+        margin: 1em auto;
+        height: 2rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .input-group .input{
+        background: transparent;
+        height: 100%;
+        flex: 1;
+        border:0; outline: 0;
+        color:  var(--whiteClr);
+        border-bottom: 1.4px solid var(--primaryClr);
+        font-family: var(--ff-r);
+        letter-spacing: .5px;
+    }
+    .input-group button{
+        flex: .3;
+        height: 100%;
+        background:var(--primaryClr) ;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        transition: 300ms ease-in-out background;
+    }
+    .input-group button:hover{
+        background: var(--primaryHoverClr);
+    }
+    .input-group button svg{
+        height: 100%;
+    }
+    #result{
+        height: 87%;
+    }
+    .card{
+        background-color: var(--darkClr);
+        margin: 1em auto;
+        height: auto;
+        width: 100%;
+        display: grid;
+        border: var(--border);
+        grid-template-columns: repeat(2 , 1fr);
+        
+        position: relative;
+        border-radius:.5em;
+        
+    }
+    .leftBox{
+        height: 20rem;
+        width: 100%;
+        padding: .5em;
+    }
+    .leftBox .imgContainer{
+        height: 15rem;
+        border-radius: calc(var(--radius) + var(--radius));
+        overflow: hidden;
+    }
+    .imgContainer .itemImage{
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 300ms ease-in-out;
+    }
+    .leftBox .itemName{
+        color: var(--whiteClr);
+        display: inline;
+        line-height: 1.18;
+        text-align: right;
+        font-family: var(--ff-m);
+
+    }
+    .leftBox .itemState{
+        display: inline;
+        text-align: right;
+        color: var(--grayishClr);
+        font-family: var(--ff-r);
+
+  
+    }
+    .imgContainer:hover .itemImage{
+        transform: scale(1.1);
+    }
+    .rightBox{
+        height: 20rem;
+        width: 100%;
+        padding: var(--radius);
+        overflow: hidden;
+    }
+
+    .header{
+        color: var(--grayishClr);
+        letter-spacing: .5px;
+        border-bottom: 1.4px solid var(--grayishClr);
+        font-family: var(--ff-m);
+        text-transform: uppercase;
+    }
+
+    #recipe{
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color:var(--overlay) ;
+        backdrop-filter: blur(8px);
+        overflow-y: scroll;
+        height: 100%;
+        z-index: 1;
+        width: 100%;
+        border-radius: var(--radius);
+
+        display: none;
+    }
+    #recipe pre{
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        padding: 1.2em 1.2em;
+        font-family: var(--ff-r);
+        line-height: 1.3;
+    }
+    .Divider{
+        height: 3em;
+        border-bottom: 1.4px solid var(--darkClr);
+        position: relative;
+    }
+    #hide-recipe{
+        border-radius: var(--radius);
+        font-size: 1em;
+        height: 25px;
+        aspect-ratio: 1;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        
+        border: 0; outline: 0;
+        cursor: pointer;
+        background: var(--whiteClr);
+        z-index: 55;
+        transition: 300ms ease-in-out background;
+    }
+    #hide-recipe:hover{
+        background: var(--primaryHoverClr);
+    }
+    #hide-racipe span{
+        font-size: 12px;
+
+    }
+    .inneritemName{
+        font-family: var(--ff-m);
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    .inneritemName span{
+        background: var(--primaryClr);
+        padding: .1em .2em ;
+        border-radius: var(--radius);
+        color: var(--darkClr);
+        font-size: 14px;
+    }
+    .rightBox #show-recipe{
+        width: 100px;
+        height: 2em;
+        cursor: pointer;
+
+        background-color: var(--primaryClr);
+        color: var(--darkClr);
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        border: 0;
+        outline: 0;
+        border-radius: var(--radius);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .2em;
+        font-family: var(--ff-r);
+        letter-spacing: .5px;
+    }
+    #show-recipe svg{
+        height: 65%;
+    }
+
+
+    #recipe::-webkit-scrollbar,
+    ul::-webkit-scrollbar{
+        width: 2px;
+        background: transparent;
+    }
+    #recipe::-webkit-scrollbar-thumb,
+    ul::-webkit-scrollbar-thumb{
+        width: 2px;
+        background: var(--whiteClr);
+    }
+    #ingredientsCon ul{
+        list-style: none;
+        font-size: 13px;
+        color: var(--whiteClr);
+        border: var(--border);
+        font-family: var(--ff-r);
+        margin-top: 1em;
+        height: 230px;
+        overflow-y: scroll;
+
+        position: relative;
+    }
+
+    #ingredientsCon li{
+        line-height: 1.5;
+        padding: .5em .5em;
+    }
+
+    #ingredientsCon li:not(:last-child){
+            border: var(--border);
+            
+    }
+    .warnMsg,
+    .warnMsgSec{
+        width: 300px;
+        height: 3em;
+        border-radius: var(--radius);
+        background: var(--darkClr);
+        font-family: var(--ff-m);
+        color: var(--whiteClr);
+
+        position:relative;
+        top: 20px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .warnMsg svg{
+        height: 65%;
+        filter: invert(1);
+    }
+    .warnMsg h3{
+        font-size: 15px;
+        font-family: var(--ff-m);
+    }
+
+    .warnMsg p{
+        color: var(--grayishClr);
+        font-size: 13px;
+        letter-spacing: .5px;
+        font-family: var(--ff-r);
+    }
+    .warnMsg  B {
+        font-family: var(--ff-m);
+        color: var(--primaryClr);
+        margin-left: .5em;
+    }
+    @media (max-width:503px) {
+
+        .container{
+        width: 100%;
+        }
+        .card{
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .relative-content{
+        border: var(--border);
+        /* height: 10rem; */
+        height: auto;
+        border-radius: var(--radius);
+    }
+
+
+</style>
+
+<div class="container">
+
+
+    <div class="input-group">
+        <input type="text" placeholder="search here" class="input" id="input" />
+        <button id="submit">
+            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#000000" d="m795.904 750.72 124.992 124.928a32 32 0 0 1-45.248 45.248L750.656 795.904a416 416 0 1 1 45.248-45.248zM480 832a352 352 0 1 0 0-704 352 352 0 0 0 0 704z"></path></g></svg>
+            </button>
+    </div>
+
+
+    <div id="result">
+
+    </div>
+   
+</div>
+
+
+<script>
+
+
+
+const warningIcon = `
+<svg fill="#000000" viewBox="-5.5 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>warning</title> <path d="M10.16 25.92c-2.6 0-8.72-0.24-9.88-2.24-1.28-2.28 2.040-8.24 3.080-10.040 1.040-1.76 4.64-7.56 7.12-7.56 2.8 0 7.24 7.48 8.56 10.12 1.92 3.84 2.48 6.4 1.56 7.6-1.52 2.040-8.96 2.12-10.44 2.12zM10.48 7.72c-0.72 0-3.080 2.36-5.64 6.76-2.76 4.68-3.48 7.72-3.080 8.4 0.32 0.56 3.2 1.4 8.4 1.4 5.44 0 8.64-0.88 9.080-1.48 0.28-0.36 0.040-2.28-1.72-5.84-2.64-5.28-6.12-9.24-7.040-9.24zM10.52 19.2c-0.48 0-0.84-0.36-0.84-0.84v-6.36c0-0.48 0.36-0.84 0.84-0.84s0.84 0.36 0.84 0.84v6.32c0 0.48-0.4 0.88-0.84 0.88zM11.36 21.36c0 0.464-0.376 0.84-0.84 0.84s-0.84-0.376-0.84-0.84c0-0.464 0.376-0.84 0.84-0.84s0.84 0.376 0.84 0.84z"></path> </g></svg>
+`;
+const racipeBookIcon = `
+<svg viewBox="0 0 24 24" 
+fill="none" 
+xmlns="http://www.w3.org/2000/svg">
+<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+<g id="SVGRepo_iconCarrier">
+ <path d="M4 8C4 5.17157 4 3.75736 4.87868 2.87868C5.75736 2 7.17157 2 10 2H14C16.8284 2 18.2426 2 19.1213 2.87868C20 3.75736 20 5.17157 20 8V16C20 18.8284 20 20.2426 19.1213 21.1213C18.2426 22 16.8284 22 14 22H10C7.17157 22 5.75736 22 4.87868 21.1213C4 20.2426 4 18.8284 4 16V8Z" stroke="#000" stroke-width="1.5"></path> 
+ <path d="M19.8978 16H7.89778C6.96781 16 6.50282 16 6.12132 16.1022C5.08604 16.3796 4.2774 17.1883 4 18.2235" stroke="#000" stroke-width="1.5"></path> 
+ <path d="M8 7H16" stroke="#000" stroke-width="1.5" stroke-linecap="round"></path> 
+ <path d="M8 10.5H13" stroke="#000" stroke-width="1.5" stroke-linecap="round"></path> 
+ <path d="M13 16V19.5309C13 19.8065 13 19.9443 12.9051 20C12.8103 20.0557 12.6806 19.9941 12.4211 19.8708L11.1789 19.2808C11.0911 19.2391 11.0472 19.2182 11 19.2182C10.9528 19.2182 10.9089 19.2391 10.8211 19.2808L9.57889 19.8708C9.31943 19.9941 9.18971 20.0557 9.09485 20C9 19.9443 9 19.8065 9 19.5309V16.45" stroke="#000" stroke-width="1.5" stroke-linecap="round"></path> 
+</g>
+</svg>
+`;
+let result  = document.getElementById('result');
+let searchBtn = document.getElementById('submit');
+let url = 'https://www.themealdb.com/api/json/v1/1/search.php?s='; 
+
+searchBtn.addEventListener('click' , ()=> {
+    let userInput = document.getElementById('input').value;
+    if(userInput.length == 0) {
+        result.innerHTML = ` 
+            <div class='warnMsg'>
+                    ${warningIcon} 
+                    <h3>Please field an input First</h3>
+            </div>`;
+    }
+    else{
+        fetch(url + userInput)
+.then(response => response.json())
+.then(data => {
+console.log(data);
+let myMeal = data.meals[0];
+console.log(myMeal);
+console.log(myMeal.strMeal);
+console.log(myMeal.strCategory);
+console.log(myMeal.strArea);
+let count = 1;
+let ingredients = [];
+for(let i in myMeal){
+    let ingredient = '';
+    let measure = '';
+    if(i.startsWith('strIngredient') && myMeal[i] ){
+        ingredient = myMeal[i];
+        measure = myMeal['strMeasure' + count];
+        count +=1;
+        // console.log(ingredients , measure);
+        ingredients.push(`${measure} ${ingredient}`);
+    }
+    console.log(ingredients)
+}
+
+result.innerHTML = `
+<div class='card'>
+    <div class='leftBox'>
+    <div class='imgContainer'>
+    <img src='${myMeal.strMealThumb}' class='itemImage' alt='myMeal.idMeal'>
+    </div>
+<h2 class="itemName">${myMeal.strMeal}</h2>
+<h5 class="itemState">${myMeal.strArea}</h5>
+</div>
+
+<div class='rightBox'>
+    <h2 class="header">ingredients</h2>
+    <div id='ingredientsCon'></div>
+    <button id='show-recipe'>
+      ${racipeBookIcon}  recipe
+    </button>
+
+    <div id='recipe'>
+        
+        <h2 class="inneritemName">Recipe <span>${myMeal.strMeal}<span></h2>
+
+        <button id='hide-recipe'>
+        <span>&Cross;</span>    
+        </button>
+
+        <div class='Divider'></div>
+
+        <pre id='instrcution'>${myMeal.strInstructions}</pre>
+        </div>
+    </div>
+</div>
+`;
+
+let ingredientCon = document.getElementById('ingredientsCon');
+let ulEle = document.createElement('ul');
+let recipe = document.getElementById('recipe');
+let hideRecipe = document.getElementById('hide-recipe');
+let showRecipe = document.getElementById('show-recipe');
+
+ingredients.forEach((i) => {
+    let liEle = document.createElement('li');
+    liEle.innerText = i;
+    ulEle.appendChild(liEle);
+    ingredientCon.appendChild(ulEle);
+});
+
+hideRecipe.addEventListener('click' , ()=> {
+recipe.style.display ='none';
+});
+showRecipe.addEventListener('click' , ()=> {
+recipe.style.display ='block';
+});
+
+}).catch(()=> {
+    result.innerHTML = ` 
+    
+    <div class='warnMsg'> No Match Found For <B> ${userInput} <B></div>
+        <br>
+    <div class='warnMsg'> 
+    ${warningIcon} 
+    <h3 >invalid Name</h3>  
+    </div>
+    
+    `; 
+})
+    
+};
+
+});
+
+
+</script>
+</body>
+</html>
